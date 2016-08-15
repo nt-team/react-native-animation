@@ -1,0 +1,28 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "jsx": "preserve",
+        "module": "es2015",
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "experimentalDecorators": true,
+        "preserveConstEnums": true,
+        "removeComments": false,
+        "sourceRoot": "src",
+        "outDir": "dist",
+        "sourceMap": true,
+        "declaration": true
+    },
+    "filesGlob": [
+        "src/**/*.ts",
+        "src/**/*.tsx"
+    ],
+    "exclude": [
+        "node_modules"
+    ],
+    "compileOnSave": false,
+    "atom": {
+        "rewriteTsconfig": false,
+        "formatOnSave": true
+    }
+}
