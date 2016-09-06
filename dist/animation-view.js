@@ -10,7 +10,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import * as React from 'react';
-import { Dimensions, findNodeHandle, UIManager, requireNativeComponent } from 'react-native';
+import { Dimensions, findNodeHandle, UIManager, requireNativeComponent, Platform, View } from 'react-native';
 import immutableRenderDecorator from './immutableRenderDecorator';
 const TBNAnimationView = requireNativeComponent('TBNAnimationView', AnimationView, {
     nativeOnly: {}
@@ -24,6 +24,9 @@ export let AnimationView = class AnimationView extends React.Component {
         this.isStart = false;
     }
     start() {
+        if (Platform.OS === 'android') {
+            return;
+        }
         if (this.isUnmount) {
             return false;
         }
@@ -43,6 +46,9 @@ export let AnimationView = class AnimationView extends React.Component {
         }
     }
     clear() {
+        if (Platform.OS === 'android') {
+            return;
+        }
         try {
             UIManager.dispatchViewManagerCommand(findNodeHandle(this), UIManager.TBNAnimationView.Commands.clear, []);
         }
@@ -51,6 +57,9 @@ export let AnimationView = class AnimationView extends React.Component {
         this.isStart = false;
     }
     add(data) {
+        if (Platform.OS === 'android') {
+            return;
+        }
         if (data) {
             this.data = data;
         }
@@ -92,6 +101,11 @@ export let AnimationView = class AnimationView extends React.Component {
         }
     }
     render() {
+        if (Platform.OS === 'android') {
+            return (<View style={this.props.style}>
+                    {this.props.children}
+                </View>);
+        }
         return (<TBNAnimationView ref={this._assignRoot} style={this.props.style}>
                 {this.props.children}
             </TBNAnimationView>);

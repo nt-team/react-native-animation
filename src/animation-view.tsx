@@ -11,6 +11,8 @@ import {
     findNodeHandle,
     UIManager,
     requireNativeComponent,
+    Platform,
+    View,
 } from 'react-native'
 import immutableRenderDecorator from './immutableRenderDecorator'
 import { AnimationModel, AnimationGroup } from './animation-model'
@@ -51,6 +53,9 @@ export class AnimationView extends React.Component<PropsDefine, {}> {
     }
 
     start() {
+        if (Platform.OS === 'android') {
+            return
+        }
         if (this.isUnmount) {
             return false
         }
@@ -76,6 +81,9 @@ export class AnimationView extends React.Component<PropsDefine, {}> {
     }
 
     clear() {
+        if (Platform.OS === 'android') {
+            return
+        }
         try {
             UIManager.dispatchViewManagerCommand(
                 findNodeHandle(this),
@@ -88,6 +96,9 @@ export class AnimationView extends React.Component<PropsDefine, {}> {
     }
 
     add(data?: AnimationModel[]) {
+        if (Platform.OS === 'android') {
+            return
+        }
         if (data) {
             this.data = data
         }
@@ -135,6 +146,15 @@ export class AnimationView extends React.Component<PropsDefine, {}> {
     }
 
     render() {
+        if (Platform.OS === 'android') {
+            return (
+                <View
+                    style={this.props.style}>
+                    {this.props.children}
+                </View>
+            )
+        }
+
         return (
             <TBNAnimationView
                 ref={this._assignRoot}
