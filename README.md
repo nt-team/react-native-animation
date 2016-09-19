@@ -9,13 +9,17 @@ npm i react-native-animation --save
 ```
 
 ### iOS
-Podfile add
+`Podfile` add
 ```
 pod 'react-native-animation', :path => '../node_modules/react-native-animation'
 ```
 
 ### Android
-Coming Soon
+`settings.gradle` add
+```
+include ':react-native-animation'
+project(':react-native-animation').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-animation/android')
+```
 
 ## Usage
 A simple example:(fade in)

@@ -10,7 +10,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import * as React from 'react';
-import { Dimensions, findNodeHandle, UIManager, requireNativeComponent, Platform, View } from 'react-native';
+import { Dimensions, findNodeHandle, UIManager, requireNativeComponent, Platform } from 'react-native';
 import immutableRenderDecorator from './immutableRenderDecorator';
 const TBNAnimationView = requireNativeComponent('TBNAnimationView', AnimationView, {
     nativeOnly: {}
@@ -22,15 +22,13 @@ export let AnimationView = class AnimationView extends React.Component {
         this.isUnmount = false;
         this._assignRoot = this._assignRoot.bind(this);
         this.isStart = false;
+        this.data = this.processData(props.data);
     }
     start() {
-        if (Platform.OS === 'android') {
-            return;
-        }
         if (this.isUnmount) {
             return false;
         }
-        UIManager.dispatchViewManagerCommand(findNodeHandle(this), UIManager.TBNAnimationView.Commands.start, [this.data]);
+        UIManager.dispatchViewManagerCommand(findNodeHandle(this), UIManager.TBNAnimationView.Commands.start, [Platform.OS === 'android' ? JSON.stringify(this.data || []) : this.data]);
         this.isStart = true;
         // TODO 临时实现，待改成原生传回
         this.props.onStart && this.props.onStart(this);
@@ -46,9 +44,6 @@ export let AnimationView = class AnimationView extends React.Component {
         }
     }
     clear() {
-        if (Platform.OS === 'android') {
-            return;
-        }
         try {
             UIManager.dispatchViewManagerCommand(findNodeHandle(this), UIManager.TBNAnimationView.Commands.clear, []);
         }
@@ -57,20 +52,14 @@ export let AnimationView = class AnimationView extends React.Component {
         this.isStart = false;
     }
     add(data) {
-        if (Platform.OS === 'android') {
-            return;
-        }
         if (data) {
-            this.data = data;
-        }
-        if (!this.data) {
-            this.processData(this.props);
+            this.data = this.processData(data);
         }
         // UIManager.dispatchViewManagerCommand(
         //     findNodeHandle(this),
         //     UIManager.TBNAnimationView.Commands.add,
         //     [data || this.data]
-        //     // [JSON.stringify(data || this.data)]
+        //     // [JSON.stringify(this.data || data)]
         // )
     }
     componentWillMount() {
@@ -91,7 +80,7 @@ export let AnimationView = class AnimationView extends React.Component {
             if (nextProps.autoclear) {
                 this.clear();
             }
-            this.processData(nextProps);
+            this.data = this.processData(nextProps.data);
             this.add();
             if (this.props.autoplay) {
                 setTimeout(() => {
@@ -101,14 +90,9 @@ export let AnimationView = class AnimationView extends React.Component {
         }
     }
     render() {
-        if (Platform.OS === 'android') {
-            return (<View style={this.props.style}>
-                    {this.props.children}
-                </View>);
-        }
-        return (<TBNAnimationView ref={this._assignRoot} style={this.props.style}>
-                {this.props.children}
-            </TBNAnimationView>);
+        return (React.createElement(TBNAnimationView, {ref: this._assignRoot, style: [this.props.style, {
+                opacity: this.props.style.opacity || 1
+            }]}, this.props.children));
     }
     _assignRoot(component) {
         this._root = component;
@@ -116,17 +100,46 @@ export let AnimationView = class AnimationView extends React.Component {
     setNativeProps(nativeProps) {
         this._root.setNativeProps(nativeProps);
     }
-    processData(props) {
-        this.data = (props.data || []).slice();
-        for (let i = 0; i < this.data.length; i++) {
-            let data = this.data[i];
-            if (data.type != 'Translate') {
-                continue;
+    processData(oriData) {
+        let data = (oriData || []).slice();
+        data.forEach((ani) => {
+            if (ani.duration) {
+                ani.duration = parseInt(ani.duration.toFixed(0));
             }
-        }
+            if (ani.startOffset) {
+                ani.startOffset = parseInt(ani.startOffset.toFixed(0));
+            }
+            if (ani.type == 'Translate' && Platform.OS === 'android') {
+                if (ani.from) {
+                    ani.from *= this._screen_scale;
+                }
+                else {
+                    ani.from = 0;
+                }
+                if (ani.from2) {
+                    ani.from2 *= this._screen_scale;
+                }
+                else {
+                    ani.from2 = 0;
+                }
+                if (ani.to) {
+                    ani.to *= this._screen_scale;
+                }
+                else {
+                    ani.to = 0;
+                }
+                if (ani.to2) {
+                    ani.to2 *= this._screen_scale;
+                }
+                else {
+                    ani.to2 = 0;
+                }
+            }
+        });
+        return data;
     }
 };
 AnimationView = __decorate([
     immutableRenderDecorator
 ], AnimationView);
-//# sourceMappingURL=animation-view.jsx.map
+//# sourceMappingURL=animation-view.js.map

@@ -1,6 +1,6 @@
 {
   "name": "react-native-animation",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A native animation UI component for react-native",
   "main": "index.js",
   "scripts": {
@@ -15,5 +15,8 @@
     "animation"
   ],
   "author": "zhang740",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "react-native": "0.33.0"
+  }
 }

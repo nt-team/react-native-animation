@@ -26,7 +26,7 @@ export declare class AnimationView extends React.Component<PropsDefine, {}> {
     private isStart;
     private data;
     private isUnmount;
-    constructor(props: any, context: any);
+    constructor(props: PropsDefine, context: any);
     start(): boolean;
     clear(): void;
     add(data?: AnimationModel[]): void;
@@ -37,5 +37,5 @@ export declare class AnimationView extends React.Component<PropsDefine, {}> {
     render(): JSX.Element;
     private _assignRoot(component);
     private setNativeProps(nativeProps);
-    private processData(props);
+    private processData(oriData);
 }
