@@ -1,5 +1,4 @@
 import * as React from 'react'
-const hoistStatics = require('hoist-non-react-statics')
 
 let whiteList = [
     '[IndexPage]'
