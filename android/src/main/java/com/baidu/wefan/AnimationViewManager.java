@@ -18,9 +18,6 @@ public class AnimationViewManager extends ViewGroupManager<TBNAnimationView> {
     public static final int COMMAND_START = 1;
     public static final int COMMAND_CLEAR = 2;
     public static final int COMMAND_ADD = 3;
-    public static final int ON_START = 4;
-    public static final int ON_END = 5;
-    public static final int ON_REPEAT = 6;
 
     public static final String REACT_CLASS = "TBNAnimationView";
 
@@ -34,13 +31,7 @@ public class AnimationViewManager extends ViewGroupManager<TBNAnimationView> {
                 "clear",
                 COMMAND_CLEAR,
                 "add",
-                COMMAND_ADD,
-                "onAnimationStart",
-                ON_START,
-                "onAnimationEnd",
-                ON_END,
-                "onAnimationRepeat",
-                ON_REPEAT
+                COMMAND_ADD
         );
     }
 
@@ -55,7 +46,8 @@ public class AnimationViewManager extends ViewGroupManager<TBNAnimationView> {
                 }
                 String data = args.getString(0);
                 System.out.println("START:" + data);
-                root.addAnimations(GSON.fromJson(data, AnimationModel[].class));
+                root.addAnimators(GSON.fromJson(data, AnimationModel[].class));
+//                root.addAnimations(GSON.fromJson(data, AnimationModel[].class));
                 root.start();
                 break;
             }
@@ -73,7 +65,8 @@ public class AnimationViewManager extends ViewGroupManager<TBNAnimationView> {
                             "Illegal number of arguments for 'COMMAND_ADD' command");
                 }
                 String data = args.getString(0);
-                root.addAnimations(GSON.fromJson(data, AnimationModel[].class));
+                root.addAnimators(GSON.fromJson(data, AnimationModel[].class));
+//                root.addAnimations(GSON.fromJson(data, AnimationModel[].class));
                 break;
             }
         }
