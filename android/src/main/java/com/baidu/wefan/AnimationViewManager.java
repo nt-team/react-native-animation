@@ -1,5 +1,6 @@
 package com.baidu.wefan;
 
+import com.facebook.react.animation.Animation;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
@@ -37,7 +38,7 @@ public class AnimationViewManager extends ViewGroupManager<TBNAnimationView> {
 
     @Override
     public void receiveCommand(TBNAnimationView root, int commandId, @Nullable ReadableArray args) {
-        System.out.println("~~~~~~~~~TBNAnimationView~~~receiveCommand~~~~~~~~~~~~~");
+//        System.out.println("~~~~~~~~~TBNAnimationView~~~receiveCommand~~~~~~~~~~~~~");
         switch (commandId) {
             case COMMAND_START: {
                 if (args == null || args.size() != 1) {
@@ -45,7 +46,7 @@ public class AnimationViewManager extends ViewGroupManager<TBNAnimationView> {
                             "Illegal number of arguments for 'COMMAND_START' command");
                 }
                 String data = args.getString(0);
-                System.out.println("START:" + data);
+//                System.out.println("START:" + data);
                 root.addAnimators(GSON.fromJson(data, AnimationModel[].class));
 //                root.addAnimations(GSON.fromJson(data, AnimationModel[].class));
                 root.start();
@@ -70,6 +71,21 @@ public class AnimationViewManager extends ViewGroupManager<TBNAnimationView> {
                 break;
             }
         }
+    }
+
+    @Nullable
+    @Override
+    public Map getExportedCustomDirectEventTypeConstants() {
+        return MapBuilder.of(
+                AnimationEvent.eventNameForType(AnimationEvent.ON_ANIMATION_START),
+                MapBuilder.of("registrationName", "onAnimationStart"),
+                AnimationEvent.eventNameForType(AnimationEvent.ON_ANIMATION_END),
+                MapBuilder.of("registrationName", "onAnimationEnd"),
+                AnimationEvent.eventNameForType(AnimationEvent.ON_ANIMATION_CANCEL),
+                MapBuilder.of("registrationName", "onAnimationCancel"),
+                AnimationEvent.eventNameForType(AnimationEvent.ON_ANIMATION_REPEAT),
+                MapBuilder.of("registrationName", "onAnimationRepeat")
+        );
     }
 
     @Override

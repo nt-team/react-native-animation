@@ -17,8 +17,10 @@ export interface PropsDefine {
     onStart?: (view: AnimationView) => void;
     /** 结束播放动画回调 */
     onEnd?: (view: AnimationView) => void;
-    /** 动画循环结束回调(暂未实现) */
-    onRepeatEnd?: (view: AnimationView) => void;
+    /** 取消播放动画回调 */
+    onCancel?: (view: AnimationView) => void;
+    /** 动画循环回调 */
+    onRepeat?: (view: AnimationView) => void;
 }
 export declare class AnimationView extends React.Component<PropsDefine, {}> {
     private _root;
@@ -34,6 +36,10 @@ export declare class AnimationView extends React.Component<PropsDefine, {}> {
     componentDidMount(): void;
     componentWillUnmount(): void;
     componentWillReceiveProps(nextProps: PropsDefine): void;
+    onAnimationStart(): void;
+    onAnimationEnd(): void;
+    onAnimationCancel(): void;
+    onAnimationRepeat(): void;
     render(): JSX.Element;
     private _assignRoot(component);
     private setNativeProps(nativeProps);

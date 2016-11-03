@@ -18,6 +18,7 @@ import android.view.animation.TranslateAnimation;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 import java.util.ArrayList;
@@ -101,38 +102,52 @@ public class TBNAnimationView extends ViewGroup {
             animator.setStartDelay(m.startOffset);
             animators.add(animator);
         }
-        animatorSet.playTogether(animators);
         animatorSet.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                onReceiveNativeEvent("onAnimationStart");
+//                onReceiveNativeEvent("onAnimationStart");
+                onReceiveNativeEvent(new AnimationEvent(
+                        getId(),
+                        AnimationEvent.ON_ANIMATION_START
+                ));
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                onReceiveNativeEvent("onAnimationEnd");
+//                onReceiveNativeEvent("onAnimationEnd");
+                onReceiveNativeEvent(new AnimationEvent(
+                        getId(),
+                        AnimationEvent.ON_ANIMATION_END
+                ));
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
-                onReceiveNativeEvent("onAnimationCancel");
+//                onReceiveNativeEvent("onAnimationCancel");
+                onReceiveNativeEvent(new AnimationEvent(
+                        getId(),
+                        AnimationEvent.ON_ANIMATION_CANCEL
+                ));
             }
 
             @Override
             public void onAnimationRepeat(Animator animation) {
-                onReceiveNativeEvent("onAnimationRepeat");
+//                onReceiveNativeEvent("onAnimationRepeat");
+                onReceiveNativeEvent(new AnimationEvent(
+                        getId(),
+                        AnimationEvent.ON_ANIMATION_REPEAT
+                ));
             }
         });
+
+        animatorSet.playTogether(animators);
     }
 
-    public void onReceiveNativeEvent(String animState) {
-        WritableMap event = Arguments.createMap();
-        event.putString("animatorState", animState);
-        ReactContext reactContext = (ReactContext)getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                getId(),
-                "topChange",
-                event);
+    public void onReceiveNativeEvent(AnimationEvent event) {
+        ReactContext reactContext = (ReactContext) getContext();
+        reactContext.getNativeModule(UIManagerModule.class)
+                .getEventDispatcher()
+                .dispatchEvent(event);
     }
 
     public void addAnimations(AnimationModel[] data) {

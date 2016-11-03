@@ -18,6 +18,10 @@ import { AnimationModel, AnimationGroup } from './animation-model'
 
 const TBNAnimationView = requireNativeComponent('TBNAnimationView', AnimationView, {
     nativeOnly: {
+        onAnimationStart: true,
+        onAnimationEnd: true,
+        onAnimationCancel: true,
+        onAnimationRepeat: true,
     }
 })
 
@@ -33,8 +37,10 @@ export interface PropsDefine {
     onStart?: (view: AnimationView) => void
     /** 结束播放动画回调 */
     onEnd?: (view: AnimationView) => void
-    /** 动画循环结束回调(暂未实现) */
-    onRepeatEnd?: (view: AnimationView) => void
+    /** 取消播放动画回调 */
+    onCancel?: (view: AnimationView) => void
+    /** 动画循环回调 */
+    onRepeat?: (view: AnimationView) => void
 }
 @immutableRenderDecorator
 export class AnimationView extends React.Component<PropsDefine, {}> {
@@ -62,19 +68,6 @@ export class AnimationView extends React.Component<PropsDefine, {}> {
             [Platform.OS === 'android' ? JSON.stringify(this.data || []) : this.data]
         )
         this.isStart = true
-
-        // TODO 临时实现，待改成原生传回
-        this.props.onStart && this.props.onStart(this)
-        if (this.props.onEnd) {
-            let maxTime = 0
-            for (let i = 0; i < this.data.length; i++) {
-                const time = this.data[i].duration + this.data[i].startOffset
-                maxTime = maxTime > time ? maxTime : time
-            }
-            setTimeout(function () {
-                !this.isUnmount && this.props.onEnd && this.props.onEnd(this)
-            }.bind(this), maxTime)
-        }
     }
 
     public clear() {
@@ -133,13 +126,32 @@ export class AnimationView extends React.Component<PropsDefine, {}> {
         }
     }
 
+    onAnimationStart() {
+        this.props.onStart && this.props.onStart(this)
+    }
+
+    onAnimationEnd() {
+        this.props.onEnd && this.props.onEnd(this)
+    }
+
+    onAnimationCancel() {
+        this.props.onCancel && this.props.onCancel(this)
+    }
+
+    onAnimationRepeat() {
+        this.props.onRepeat && this.props.onRepeat(this)
+    }
+
     render() {
         return (
             <TBNAnimationView
                 ref={this._assignRoot}
-                style={[this.props.style, {
-                    opacity: this.props.style.opacity || 1
-                } as React.ViewStyle]}>
+                style={this.props.style}
+                onAnimationStart={this.onAnimationStart.bind(this)}
+                onAnimationEnd={this.onAnimationEnd.bind(this)}
+                onAnimationCancel={this.onAnimationCancel.bind(this)}
+                onAnimationRepeat={this.onAnimationRepeat.bind(this)}
+                >
                 {this.props.children}
             </TBNAnimationView>
         )

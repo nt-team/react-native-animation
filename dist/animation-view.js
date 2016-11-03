@@ -13,7 +13,12 @@ import * as React from 'react';
 import { Dimensions, findNodeHandle, UIManager, requireNativeComponent, Platform } from 'react-native';
 import immutableRenderDecorator from './immutableRenderDecorator';
 const TBNAnimationView = requireNativeComponent('TBNAnimationView', AnimationView, {
-    nativeOnly: {}
+    nativeOnly: {
+        onAnimationStart: true,
+        onAnimationEnd: true,
+        onAnimationCancel: true,
+        onAnimationRepeat: true,
+    }
 });
 export let AnimationView = class AnimationView extends React.Component {
     constructor(props, context) {
@@ -30,18 +35,6 @@ export let AnimationView = class AnimationView extends React.Component {
         }
         UIManager.dispatchViewManagerCommand(findNodeHandle(this), UIManager.TBNAnimationView.Commands.start, [Platform.OS === 'android' ? JSON.stringify(this.data || []) : this.data]);
         this.isStart = true;
-        // TODO 临时实现，待改成原生传回
-        this.props.onStart && this.props.onStart(this);
-        if (this.props.onEnd) {
-            let maxTime = 0;
-            for (let i = 0; i < this.data.length; i++) {
-                const time = this.data[i].duration + this.data[i].startOffset;
-                maxTime = maxTime > time ? maxTime : time;
-            }
-            setTimeout(function () {
-                !this.isUnmount && this.props.onEnd && this.props.onEnd(this);
-            }.bind(this), maxTime);
-        }
     }
     clear() {
         try {
@@ -89,10 +82,20 @@ export let AnimationView = class AnimationView extends React.Component {
             }
         }
     }
+    onAnimationStart() {
+        this.props.onStart && this.props.onStart(this);
+    }
+    onAnimationEnd() {
+        this.props.onEnd && this.props.onEnd(this);
+    }
+    onAnimationCancel() {
+        this.props.onCancel && this.props.onCancel(this);
+    }
+    onAnimationRepeat() {
+        this.props.onRepeat && this.props.onRepeat(this);
+    }
     render() {
-        return (React.createElement(TBNAnimationView, {ref: this._assignRoot, style: [this.props.style, {
-                opacity: this.props.style.opacity || 1
-            }]}, this.props.children));
+        return (React.createElement(TBNAnimationView, {ref: this._assignRoot, style: this.props.style, onAnimationStart: this.onAnimationStart.bind(this), onAnimationEnd: this.onAnimationEnd.bind(this), onAnimationCancel: this.onAnimationCancel.bind(this), onAnimationRepeat: this.onAnimationRepeat.bind(this)}, this.props.children));
     }
     _assignRoot(component) {
         this._root = component;
