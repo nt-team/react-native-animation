@@ -16,6 +16,11 @@
 
 RCT_EXPORT_MODULE();
 
+RCT_EXPORT_VIEW_PROPERTY(onAnimationStart, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onAnimationEnd, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onAnimationCancel, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onAnimationRepeat, RCTDirectEventBlock)
+
 @synthesize bridge = _bridge;
 
 - (UIView *)view

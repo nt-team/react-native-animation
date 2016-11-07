@@ -9,6 +9,15 @@
 #import "RCTViewManager.h"
 #import "TBNAnimationView.h"
 
+@interface TBNAnimationView()
+
+@property (nonatomic, copy) RCTDirectEventBlock onAnimationStart;
+@property (nonatomic, copy) RCTDirectEventBlock onAnimationEnd;
+@property (nonatomic, copy) RCTDirectEventBlock onAnimationCancel;
+@property (nonatomic, copy) RCTDirectEventBlock onAnimationRepeat;
+
+@end
+
 @implementation TBNAnimationView
 
 id _data;
@@ -57,16 +66,19 @@ id _data;
         if([type isEqual: @"Translate"]){
             [self setAniValue:@"transform.translation.x" :startOffset :duration :repeat :str[@"from"] :str[@"to"]];
             [self setAniValue:@"transform.translation.y" :startOffset :duration :repeat :str[@"from2"] :str[@"to2"]];
+            [self setAniValue:@"transform.translation.z" :startOffset :duration :repeat :str[@"from3"] :str[@"to3"]];
         }
         
         if([type isEqual: @"Rotate"]){
             [self setAniValue:@"transform.rotation.x" :startOffset :duration :repeat :str[@"from"] :str[@"to"]];
             [self setAniValue:@"transform.rotation.y" :startOffset :duration :repeat :str[@"from2"] :str[@"to2"]];
+            [self setAniValue:@"transform.rotation.z" :startOffset :duration :repeat :str[@"from3"] :str[@"to3"]];
         }
         
         if([type isEqual: @"Scale"]){
             [self setAniValue:@"transform.scale.x" :startOffset :duration :repeat :str[@"from"] :str[@"to"]];
             [self setAniValue:@"transform.scale.y" :startOffset :duration :repeat :str[@"from2"] :str[@"to2"]];
+            [self setAniValue:@"transform.scale.z" :startOffset :duration :repeat :str[@"from3"] :str[@"to3"]];
         }
         
         if([type isEqual: @"Alpha"]){
@@ -75,9 +87,31 @@ id _data;
     }
 }
 
-- (void)finishAnimation
+/* Called when the animation begins its active duration. */
+
+- (void)animationDidStart:(CAAnimation *)anim
 {
-    NSLog(@"finishAnimation");
+    if(_onAnimationStart){
+        _onAnimationStart(nil);
+    }
+}
+
+/* Called when the animation either completes its active duration or
+ * is removed from the object it is attached to (i.e. the layer). 'flag'
+ * is true if the animation reached the end of its active duration
+ * without being removed. */
+
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
+{
+    if(flag){
+        if(_onAnimationEnd){
+            _onAnimationEnd(nil);
+        }
+    }else{
+        if(_onAnimationCancel){
+            _onAnimationCancel(nil);
+        }
+    }
 }
 
 - (void)clear
