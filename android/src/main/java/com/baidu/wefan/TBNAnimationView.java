@@ -72,9 +72,9 @@ public class TBNAnimationView extends ViewGroup {
                     animator = ObjectAnimator.ofPropertyValuesHolder(this, tranX, tranY, tranZ);
                     break;
                 case Rotate:
-                    PropertyValuesHolder rotaX = PropertyValuesHolder.ofFloat("translationX", m.from, m.to);
-                    PropertyValuesHolder rotaY = PropertyValuesHolder.ofFloat("translationY", m.from2, m.to2);
-                    PropertyValuesHolder rotaZ = PropertyValuesHolder.ofFloat("translationZ", m.from3, m.to3);
+                    PropertyValuesHolder rotaX = PropertyValuesHolder.ofFloat("rotationX", m.from, m.to);
+                    PropertyValuesHolder rotaY = PropertyValuesHolder.ofFloat("rotationY", m.from2, m.to2);
+                    PropertyValuesHolder rotaZ = PropertyValuesHolder.ofFloat("rotation", m.from3, m.to3);
                     animator = ObjectAnimator.ofPropertyValuesHolder(this, rotaX, rotaY, rotaZ);
                     break;
                 case Scale:

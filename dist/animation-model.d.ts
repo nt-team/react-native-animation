@@ -7,8 +7,12 @@ export interface AnimationModel {
     from?: number;
     /** 目标值 */
     to?: number;
+    /** Y */
     from2?: number;
     to2?: number;
+    /** Z */
+    from3?: number;
+    to3?: number;
     /** 动画时间 */
     duration: number;
     /** 延迟 */
