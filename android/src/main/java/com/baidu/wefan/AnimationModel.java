@@ -18,6 +18,8 @@ public class AnimationModel {
     public Float to;
     public Float from2;
     public Float to2;
+    public Float from3;
+    public Float to3;
     public int duration;
     public int startOffset;
     public String interpolator; // 'Linear'

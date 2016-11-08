@@ -174,26 +174,34 @@ export class AnimationView extends React.Component<PropsDefine, {}> {
             if (ani.startOffset) {
                 ani.startOffset = parseInt(ani.startOffset.toFixed(0))
             }
-            if (ani.type == 'Translate' && Platform.OS === 'android') {
-                if (ani.from) {
-                    ani.from *= this._screen_scale
-                } else {
-                    ani.from = 0
-                }
-                if (ani.from2) {
-                    ani.from2 *= this._screen_scale
-                } else {
-                    ani.from2 = 0
-                }
-                if (ani.to) {
-                    ani.to *= this._screen_scale
-                } else {
-                    ani.to = 0
-                }
-                if (ani.to2) {
-                    ani.to2 *= this._screen_scale
-                } else {
-                    ani.to2 = 0
+            if (Platform.OS === 'android') {
+                ani.from = ani.from || 0
+                ani.to = ani.to || 0
+                ani.from2 = ani.from2 || 0
+                ani.to2 = ani.to2 || 0
+                ani.from3 = ani.from3 || 0
+                ani.to3 = ani.to3 || 0
+                switch (ani.type) {
+                    case 'Translate':
+                        if (ani.from) {
+                            ani.from *= this._screen_scale
+                        }
+                        if (ani.to) {
+                            ani.to *= this._screen_scale
+                        }
+                        if (ani.from2) {
+                            ani.from2 *= this._screen_scale
+                        }
+                        if (ani.to2) {
+                            ani.to2 *= this._screen_scale
+                        }
+                        if (ani.from3) {
+                            ani.from3 *= this._screen_scale
+                        }
+                        if (ani.to3) {
+                            ani.to3 *= this._screen_scale
+                        }
+                        break
                 }
             }
         })

@@ -66,25 +66,22 @@ public class TBNAnimationView extends ViewGroup {
             ObjectAnimator animator = null;
             switch (m.type) {
                 case Translate:
-                    if (m.from != null && m.to != null && m.from2 != null && m.to2 != null) {
-                        PropertyValuesHolder tranX = PropertyValuesHolder.ofFloat("translationX", m.from, m.to);
-                        PropertyValuesHolder tranY = PropertyValuesHolder.ofFloat("translationY", m.from2, m.to2);
-                        animator = ObjectAnimator.ofPropertyValuesHolder(this, tranX, tranY);
-                    } else if (m.from != null && m.to != null) {
-                        PropertyValuesHolder tranX = PropertyValuesHolder.ofFloat("translationX", m.from, m.to);
-                        animator = ObjectAnimator.ofPropertyValuesHolder(this, tranX);
-                    } else if (m.from2 != null && m.to2 != null) {
-                        PropertyValuesHolder tranY = PropertyValuesHolder.ofFloat("translationY", m.from2, m.to2);
-                        animator = ObjectAnimator.ofPropertyValuesHolder(this, tranY);
-                    }
+                    PropertyValuesHolder tranX = PropertyValuesHolder.ofFloat("translationX", m.from, m.to);
+                    PropertyValuesHolder tranY = PropertyValuesHolder.ofFloat("translationY", m.from2, m.to2);
+                    PropertyValuesHolder tranZ = PropertyValuesHolder.ofFloat("translationZ", m.from3, m.to3);
+                    animator = ObjectAnimator.ofPropertyValuesHolder(this, tranX, tranY, tranZ);
                     break;
                 case Rotate:
-                    animator = ObjectAnimator.ofFloat(this, "rotation", m.from, m.to);
+                    PropertyValuesHolder rotaX = PropertyValuesHolder.ofFloat("translationX", m.from, m.to);
+                    PropertyValuesHolder rotaY = PropertyValuesHolder.ofFloat("translationY", m.from2, m.to2);
+                    PropertyValuesHolder rotaZ = PropertyValuesHolder.ofFloat("translationZ", m.from3, m.to3);
+                    animator = ObjectAnimator.ofPropertyValuesHolder(this, rotaX, rotaY, rotaZ);
                     break;
                 case Scale:
                     PropertyValuesHolder scaleX = PropertyValuesHolder.ofFloat("scaleX", m.from, m.to);
                     PropertyValuesHolder scaleY = PropertyValuesHolder.ofFloat("scaleY", m.from2, m.to2);
-                    animator = ObjectAnimator.ofPropertyValuesHolder(this, scaleX, scaleY);
+                    PropertyValuesHolder scaleZ = PropertyValuesHolder.ofFloat("scaleZ", m.from3, m.to3);
+                    animator = ObjectAnimator.ofPropertyValuesHolder(this, scaleX, scaleY, scaleZ);
                     break;
                 case Alpha:
                     animator = ObjectAnimator.ofFloat(this, "alpha", m.from, m.to);
@@ -150,58 +147,4 @@ public class TBNAnimationView extends ViewGroup {
                 .dispatchEvent(event);
     }
 
-    public void addAnimations(AnimationModel[] data) {
-        animationSet = new AnimationSet(false);
-        animationSet.setFillEnabled(true);
-        animationSet.setFillAfter(true);
-        animationSet.setFillBefore(false);
-        for (AnimationModel m : data) {
-            Animation animation = null;
-            switch (m.type) {
-                case Translate:
-                    if (m.from != null && m.to != null && m.from2 != null && m.to2 != null) {
-                        animation = new TranslateAnimation(m.from, m.to, m.from2, m.to2);
-                    } else if (m.from != null && m.to != null) {
-                        animation = new TranslateAnimation(m.from, m.to, 0, 0);
-                    } else if (m.from2 != null && m.to2 != null) {
-                        animation = new TranslateAnimation(0, 0, m.from2, m.to2);
-                    }
-                    break;
-                case Rotate:
-                    animation = new RotateAnimation(m.from, m.to);
-                    break;
-                case Scale:
-                    animation = new ScaleAnimation(m.from, m.to, m.from2, m.to2);
-                    break;
-                case Alpha:
-                    System.out.println("Animation:Alpha " + m.from + " " + m.to);
-                    animation = new AlphaAnimation(m.from, m.to);
-                    break;
-            }
-            if (animation == null) {
-                continue;
-            }
-            animation.setDuration(m.duration);
-            animation.setInterpolator(new LinearInterpolator());//TODO
-            animation.setRepeatCount(m.repeat);
-            animation.setStartOffset(m.startOffset);
-            animationSet.addAnimation(animation);
-        }
-        animationSet.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-    }
 }
