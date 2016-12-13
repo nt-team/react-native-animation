@@ -203,6 +203,29 @@ export class AnimationView extends React.Component<PropsDefine, {}> {
                         }
                         break
                 }
+            } else if (Platform.OS === 'ios') {
+                switch (ani.type) {
+                    case 'Rotate':
+                        if (ani.from) {
+                            ani.from = -(ani.from / 180)
+                        }
+                        if (ani.to) {
+                            ani.to = -(ani.to / 180)
+                        }
+                        if (ani.from2) {
+                            ani.from2 = -(ani.from2 / 180)
+                        }
+                        if (ani.to2) {
+                            ani.to2 = -(ani.to2 / 180)
+                        }
+                        if (ani.from3) {
+                            ani.from3 = -(ani.from3 / 180)
+                        }
+                        if (ani.to3) {
+                            ani.to3 = -(ani.to3 / 180)
+                        }
+                        break
+                }
             }
         })
         return data

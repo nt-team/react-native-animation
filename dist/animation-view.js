@@ -10,7 +10,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import * as React from 'react';
-import { Dimensions, findNodeHandle, UIManager, requireNativeComponent, Platform } from 'react-native';
+import { Dimensions, findNodeHandle, UIManager, requireNativeComponent, Platform, } from 'react-native';
 import immutableRenderDecorator from './immutableRenderDecorator';
 const TBNAnimationView = requireNativeComponent('TBNAnimationView', AnimationView, {
     nativeOnly: {
@@ -20,7 +20,7 @@ const TBNAnimationView = requireNativeComponent('TBNAnimationView', AnimationVie
         onAnimationRepeat: true,
     }
 });
-export let AnimationView = class AnimationView extends React.Component {
+let AnimationView = class AnimationView extends React.Component {
     constructor(props, context) {
         super(props, context);
         this._screen_scale = Dimensions.get('window').scale;
@@ -95,7 +95,7 @@ export let AnimationView = class AnimationView extends React.Component {
         this.props.onRepeat && this.props.onRepeat(this);
     }
     render() {
-        return (React.createElement(TBNAnimationView, {ref: this._assignRoot, style: this.props.style, onAnimationStart: this.onAnimationStart.bind(this), onAnimationEnd: this.onAnimationEnd.bind(this), onAnimationCancel: this.onAnimationCancel.bind(this), onAnimationRepeat: this.onAnimationRepeat.bind(this)}, this.props.children));
+        return (React.createElement(TBNAnimationView, { ref: this._assignRoot, style: this.props.style, onAnimationStart: this.onAnimationStart.bind(this), onAnimationEnd: this.onAnimationEnd.bind(this), onAnimationCancel: this.onAnimationCancel.bind(this), onAnimationRepeat: this.onAnimationRepeat.bind(this) }, this.props.children));
     }
     _assignRoot(component) {
         this._root = component;
@@ -142,6 +142,30 @@ export let AnimationView = class AnimationView extends React.Component {
                         break;
                 }
             }
+            else if (Platform.OS === 'ios') {
+                switch (ani.type) {
+                    case 'Rotate':
+                        if (ani.from) {
+                            ani.from = -(ani.from / 180);
+                        }
+                        if (ani.to) {
+                            ani.to = -(ani.to / 180);
+                        }
+                        if (ani.from2) {
+                            ani.from2 = -(ani.from2 / 180);
+                        }
+                        if (ani.to2) {
+                            ani.to2 = -(ani.to2 / 180);
+                        }
+                        if (ani.from3) {
+                            ani.from3 = -(ani.from3 / 180);
+                        }
+                        if (ani.to3) {
+                            ani.to3 = -(ani.to3 / 180);
+                        }
+                        break;
+                }
+            }
         });
         return data;
     }
@@ -149,4 +173,5 @@ export let AnimationView = class AnimationView extends React.Component {
 AnimationView = __decorate([
     immutableRenderDecorator
 ], AnimationView);
+export { AnimationView };
 //# sourceMappingURL=animation-view.js.map
