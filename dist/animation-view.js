@@ -146,22 +146,22 @@ let AnimationView = class AnimationView extends React.Component {
                 switch (ani.type) {
                     case 'Rotate':
                         if (ani.from) {
-                            ani.from = -(ani.from / 180);
+                            ani.from /= (180 / Math.PI);
                         }
                         if (ani.to) {
-                            ani.to = -(ani.to / 180);
+                            ani.to /= (180 / Math.PI);
                         }
                         if (ani.from2) {
-                            ani.from2 = -(ani.from2 / 180);
+                            ani.from2 /= (180 / Math.PI);
                         }
                         if (ani.to2) {
-                            ani.to2 = -(ani.to2 / 180);
+                            ani.to2 /= (180 / Math.PI);
                         }
                         if (ani.from3) {
-                            ani.from3 = -(ani.from3 / 180);
+                            ani.from3 /= (180 / Math.PI);
                         }
                         if (ani.to3) {
-                            ani.to3 = -(ani.to3 / 180);
+                            ani.to3 /= (180 / Math.PI);
                         }
                         break;
                 }
