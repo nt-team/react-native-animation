@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name          = "react-native-animation"
-  s.version       = "0.0.2"
+  s.version       = "1.0.6"
   s.platform      = :ios, "8.0"
   s.authors       = { "Zhang Zhenyang" => "zhangzhenyang@baidu.com" }
   s.license       = "MIT"
